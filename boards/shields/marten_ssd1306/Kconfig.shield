@@ -1,0 +1,2 @@
+config SHIELD_MARTEN_SSD1306
+    def_bool $(shields_list_contains,marten_ssd1306)

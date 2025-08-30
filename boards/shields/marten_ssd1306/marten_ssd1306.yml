@@ -1,0 +1,8 @@
+file_format: "1"
+id: marten_ssd1306
+name: Marten Numpad SSD1306 OLED
+type: shield
+requires:
+  - marten_peripheral
+features:
+  - display

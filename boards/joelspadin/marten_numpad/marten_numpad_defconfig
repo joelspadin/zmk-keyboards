@@ -1,0 +1,31 @@
+CONFIG_ARM_MPU=y
+CONFIG_LED=y
+CONFIG_GPIO=y
+CONFIG_PINCTRL=y
+CONFIG_PWM=y
+CONFIG_REGULATOR=y
+CONFIG_SENSOR=y
+
+# Place application at &code_partition address
+CONFIG_USE_DT_CODE_PARTITION=y
+
+# Generate a .uf2 firmware image
+CONFIG_BUILD_OUTPUT_UF2=y
+
+# Enable NVS for settings
+CONFIG_MPU_ALLOW_FLASH_WRITE=y
+CONFIG_NVS=y
+CONFIG_SETTINGS_NVS=y
+CONFIG_FLASH=y
+CONFIG_FLASH_PAGE_LAYOUT=y
+CONFIG_FLASH_MAP=y
+
+# Using a 20ppm crystal
+CONFIG_CLOCK_CONTROL_NRF_K32SRC_20PPM=y
+
+# Get notified if we overflow a stack
+CONFIG_HW_STACK_PROTECTION=y
+
+# Enable ZMK features
+CONFIG_ZMK_BLE=y
+CONFIG_ZMK_USB=y

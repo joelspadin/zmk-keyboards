@@ -1,0 +1,1 @@
+target_sources_ifdef(CONFIG_ZMK_INDICATOR_LEDS app PRIVATE indicator_leds.c)

@@ -1,0 +1,16 @@
+file_format: "1"
+id: marten_numpad
+name: Marten Numpad
+type: board
+arch: arm
+
+url: https://github.com/joelspadin/page-turner
+
+features:
+  - keys
+  - studio
+outputs:
+  - usb
+  - ble
+exposes:
+  - marten_peripheral

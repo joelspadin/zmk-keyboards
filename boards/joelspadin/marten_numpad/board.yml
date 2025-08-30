@@ -1,0 +1,5 @@
+board:
+  name: marten_numpad
+  vendor: joelspadin
+  socs:
+    - name: nrf52840

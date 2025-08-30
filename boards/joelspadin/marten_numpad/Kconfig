@@ -1,0 +1,7 @@
+if BOARD_MARTEN_NUMPAD
+
+config BOARD_POWER_BUTTON_SOFT_OFF
+    bool "Power off the board when the power button is pressed"
+    default y
+
+endif

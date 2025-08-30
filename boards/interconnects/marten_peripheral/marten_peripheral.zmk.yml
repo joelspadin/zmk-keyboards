@@ -1,0 +1,10 @@
+file_format: "1"
+id: marten_peripheral
+name: Marten Numpad Peripheral
+type: interconnect
+description: |
+  Ribbon cable connection for Marten Numpad peripheral device.
+  Can use I2C or SPI (SCK, MOSI, and CS only), but not both.
+node_labels:
+  i2c: marten_i2c
+  spi: marten_spi

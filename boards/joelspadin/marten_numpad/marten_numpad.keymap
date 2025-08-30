@@ -1,0 +1,103 @@
+#include <behaviors.dtsi>
+#include <dt-bindings/zmk/keys.h>
+#include <dt-bindings/zmk/bt.h>
+#include <dt-bindings/zmk/outputs.h>
+
+// Key code aliases (for better keymap alignment)
+#define KP_DIV KP_DIVIDE
+#define KP_MULT KP_MULTIPLY
+
+// Layers
+#define DEFAULT 0
+#define FN 1
+
+/ {
+    // Require a double tap to clear a bluetooth profile since the clear button
+    // is adjacent to the FN layer button.
+    dt_bt_clr: dt_bt_clr {
+        compatible = "zmk,behavior-tap-dance";
+        display-name = "Double Tap BT Clear";
+        #binding-cells = <0>;
+
+        tapping-term-ms = <200>;
+        bindings = <&none>, <&bt BT_CLR>;
+    };
+
+    keymap {
+        compatible = "zmk,keymap";
+        display-name = "base";
+
+        default_layer {
+            bindings = <
+            &kp ESC     &kp TAB     &kp BKSP     &mo FN
+            &kp KP_NUM  &kp KP_DIV  &kp KP_MULT  &kp KP_MINUS
+            &kp KP_N7   &kp KP_N8   &kp KP_N9    &kp KP_PLUS
+            &kp KP_N4   &kp KP_N5   &kp KP_N6
+            &kp KP_N1   &kp KP_N2   &kp KP_N3    &kp KP_ENTER
+            &kp KP_N0               &kp KP_DOT
+            >;
+
+            sensor-bindings = <
+            &inc_dec_kp C_VOL_UP C_VOL_DN
+            &inc_dec_kp C_VOL_UP C_VOL_DN
+            >;
+        };
+
+        fn_layer {
+            display-name = "fn";
+
+            bindings = <
+            &bootloader     &trans        &trans        &trans
+            &studio_unlock  &trans        &trans        &dt_bt_clr
+            &trans          &trans        &trans        &trans
+            &trans          &trans        &trans
+            &bt BT_SEL 0    &bt BT_SEL 1  &bt BT_SEL 2  &trans
+            &out OUT_USB                  &out OUT_BLE
+            >;
+        };
+
+        // layer_3 { status = "reserved"; };
+        // layer_4 { status = "reserved"; };
+        // layer_5 { status = "reserved"; };
+        // layer_6 { status = "reserved"; };
+        // layer_7 { status = "reserved"; };
+        // layer_8 { status = "reserved"; };
+        // layer_9 { status = "reserved"; };
+        // layer_10 { status = "reserved"; };
+        // layer_11 { status = "reserved"; };
+        // layer_12 { status = "reserved"; };
+        // layer_13 { status = "reserved"; };
+        // layer_14 { status = "reserved"; };
+        // layer_15 { status = "reserved"; };
+        // layer_16 { status = "reserved"; };
+        // layer_17 { status = "reserved"; };
+        // layer_18 { status = "reserved"; };
+        // layer_19 { status = "reserved"; };
+        // layer_20 { status = "reserved"; };
+        // layer_21 { status = "reserved"; };
+        // layer_22 { status = "reserved"; };
+        // layer_23 { status = "reserved"; };
+        // layer_24 { status = "reserved"; };
+        // layer_25 { status = "reserved"; };
+        // layer_26 { status = "reserved"; };
+        // layer_27 { status = "reserved"; };
+        // layer_28 { status = "reserved"; };
+        // layer_29 { status = "reserved"; };
+        // layer_30 { status = "reserved"; };
+        // layer_31 { status = "reserved"; };
+        // layer_32 { status = "reserved"; };
+    };
+
+    sensors {
+        compatible = "zmk,keymap-sensors";
+        sensors = <&left_encoder &right_encoder>;
+
+        left_encoder {
+            triggers-per-rotation = <30>;
+        };
+
+        right_encoder {
+            triggers-per-rotation = <30>;
+        };
+    };
+};
