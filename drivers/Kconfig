@@ -1,0 +1,3 @@
+rsource "charger/Kconfig"
+rsource "fuel_gauge/Kconfig"
+rsource "indicators/Kconfig"

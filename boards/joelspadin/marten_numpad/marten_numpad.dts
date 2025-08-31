@@ -27,9 +27,9 @@
         zephyr,code-partition = &code_partition;
         zephyr,sram = &sram0;
         zephyr,flash = &flash0;
-        // TODO: enable nPM1300 fuel gauge
-        // zmk,battery = &npm1300;
+        zmk,battery = &npm1300_fuel_gauge;
         // zmk,battery = &vbatt;
+        zmk,charger = &npm1300_charger_wrapper;
         zmk,physical-layout = &layout_numpad_21_key;
     };
 
@@ -248,7 +248,7 @@
             term-microvolt = <4150000>;
             term-warm-microvolt = <4000000>;
             current-microamp = <250000>;
-            dischg-limit-microamp = <1000000>;
+            dischg-limit-microamp = <200000>;
             vbus-limit-microamp = <500000>;
 
             // No thermistor
@@ -263,8 +263,17 @@
             nordic,led2-mode = "host";
         };
 
-        // TODO: fuel gauge driver doesn't exist in Zephyr?
-        // Only seems to exist in https: //github.com/nrfconnect/sdk-nrfxlib
+        npm1300_charger_wrapper: charger_wrapper {
+            compatible = "nordic,npm1300-charger-new-api";
+
+            charger = <&npm1300_charger>;
+        };
+
+        npm1300_fuel_gauge: fuel_gauge {
+            compatible = "nordic,npm1300-fuel-gauge";
+
+            charger = <&npm1300_charger>;
+        };
     };
 };
 

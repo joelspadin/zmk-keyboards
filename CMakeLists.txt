@@ -1,2 +1,2 @@
-add_subdirectory(src)
+add_subdirectory(drivers)
 zephyr_include_directories(include)

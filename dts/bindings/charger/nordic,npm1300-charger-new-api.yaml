@@ -1,0 +1,9 @@
+description: nPM1300 Charger (new API)
+
+compatible: "nordic,npm1300-charger-new-api"
+
+properties:
+  charger:
+    type: phandle
+    required: true
+    description: The nordic,npm1300-charger device.

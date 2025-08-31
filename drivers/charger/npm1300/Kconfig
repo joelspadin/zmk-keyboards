@@ -1,0 +1,7 @@
+config CHARGER_NPM1300_NEW_API
+    bool "nPM1300 PMIC charger driver"
+    default y
+    depends on DT_HAS_NORDIC_NPM1300_CHARGER_NEW_API_ENABLED
+    select MFD_NPM1300
+    select NPM1300_CHARGER
+

@@ -1,0 +1,1 @@
+zephyr_library_sources(charger_npm1300.c)

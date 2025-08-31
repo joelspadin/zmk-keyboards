@@ -99,11 +99,6 @@ static int update_device(const struct device *dev) {
     data->indicators = zmk_hid_indicators_get_current_profile();
     data->usb_powered = zmk_usb_is_powered();
 
-    printk("Updating %s\n", dev->name);
-    printk("activity_state = %d", data->activity_state);
-    printk("indicators = %u", data->indicators);
-    printk("usb_powered = %u", data->usb_powered);
-
     for (int i = 0; i < config->num_indicators; i++) {
         const int err = update_indicator(&config->indicators[i], data);
         if (err) {
@@ -129,6 +124,8 @@ static int update_all(void) {
 }
 
 static int indicator_led_event_listener(const zmk_event_t *eh) {
+    LOG_DBG("Updating indicators: %s", eh->event->name);
+
     update_all();
     return ZMK_EV_EVENT_BUBBLE;
 }

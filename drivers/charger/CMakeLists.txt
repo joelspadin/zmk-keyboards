@@ -1,0 +1,3 @@
+zephyr_library_amend()
+
+add_subdirectory_ifdef(CONFIG_CHARGER_NPM1300_NEW_API npm1300)

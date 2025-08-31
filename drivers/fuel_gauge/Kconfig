@@ -1,0 +1,5 @@
+if FUEL_GAUGE
+
+rsource "npm1300/Kconfig"
+
+endif # FUEL_GAUGE

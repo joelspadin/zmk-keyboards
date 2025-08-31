@@ -1,0 +1,11 @@
+description: nPM1300 Fuel Gauge
+
+compatible: "nordic,npm1300-fuel-gauge"
+
+include: [fuel-gauge.yaml]
+
+properties:
+  charger:
+    type: phandle
+    required: true
+    description: The nordic,npm1300-charger device.

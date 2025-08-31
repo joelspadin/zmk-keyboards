@@ -1,0 +1,1 @@
+zephyr_library_sources(fuel_gauge_npm1300.c)

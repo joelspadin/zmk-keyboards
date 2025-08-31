@@ -1,0 +1,5 @@
+if CHARGER
+
+rsource "npm1300/Kconfig"
+
+endif # CHARGER

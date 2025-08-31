@@ -1,6 +1,1 @@
-config ZMK_INDICATOR_LEDS
-    bool
-    default y
-    depends on DT_HAS_ZMK_INDICATOR_LEDS_ENABLED
-    select LED
-    select ZMK_HID_INDICATORS
+rsource "drivers/Kconfig"

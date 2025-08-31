@@ -1,0 +1,4 @@
+add_subdirectory(indicators)
+
+add_subdirectory_ifdef(CONFIG_CHARGER charger)
+add_subdirectory_ifdef(CONFIG_FUEL_GAUGE fuel_gauge)
