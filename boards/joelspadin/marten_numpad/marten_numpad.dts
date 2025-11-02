@@ -27,9 +27,9 @@
         zephyr,code-partition = &code_partition;
         zephyr,sram = &sram0;
         zephyr,flash = &flash0;
-        zmk,battery = &npm1300_fuel_gauge;
-        // zmk,battery = &vbatt;
-        zmk,charger = &npm1300_charger_wrapper;
+        // zmk,battery = &npm1300_fuel_gauge;
+        zmk,battery = &vbatt;
+        // zmk,charger = &npm1300_charger_wrapper;
         zmk,physical-layout = &layout_numpad_21_key;
     };
 
@@ -48,11 +48,11 @@
     // TODO: Test idle power usage of GPIO vs PWM. Check if PWM is even needed
     // or resistor value can be changed to get appropriate brightness.
     // pwm_leds {
-        //     compatible = "pwm-leds";
+    //     compatible = "pwm-leds";
 
-        //     numlock_led: numlock_led {
-            //         pwms = <&pwm0 0 PWM_USEC(20) PWM_POLARITY_NORMAL>;
-        //     };
+    //     numlock_led: numlock_led {
+    //         pwms = <&pwm0 0 PWM_USEC(20) PWM_POLARITY_NORMAL>;
+    //     };
     // };
 
     indicators {
@@ -207,6 +207,10 @@
     status = "okay";
 };
 
+&uicr {
+    nfct-pins-as-gpios;
+};
+
 &pwm0 {
     status = "okay";
     pinctrl-0 = <&pwm0_default>;
@@ -286,12 +290,12 @@ marten_i2c: &i2c1 {
     pinctrl-names = "default", "sleep";
 };
 
-marten_spi: &spi3 {
+marten_spi: &spi1 {
     compatible = "nordic,nrf-spim";
     status = "disabled";
 
-    pinctrl-0 = <&spi3_default>;
-    pinctrl-1 = <&spi3_sleep>;
+    pinctrl-0 = <&spi1_default>;
+    pinctrl-1 = <&spi1_sleep>;
     pinctrl-names = "default", "sleep";
     cs-gpios = <&gpio1 8 GPIO_ACTIVE_HIGH>;
 };
