@@ -11,6 +11,8 @@
 
 LOG_MODULE_REGISTER(charger_npm1300, CONFIG_CHARGER_LOG_LEVEL);
 
+// Battery detection functionality has been removed. This bit may be 0 even with a battery.
+// https://docs.nordicsemi.com/bundle/PCN/resource/pcn_213_v1.1.pdf
 #define STATUS_BATTERY_DETECTED 0x01
 #define STATUS_COMPLETED 0x02
 #define STATUS_TRICKLECHARGE 0x04
@@ -68,19 +70,6 @@ static int get_charger_online(const struct device *dev, enum charger_online *val
     return 0;
 }
 
-static int get_battery_present(const struct device *dev, bool *val) {
-    struct sensor_value sensor;
-    int ret = get_charger_channel(dev, SENSOR_CHAN_NPM1300_CHARGER_STATUS, &sensor);
-    if (ret) {
-        return ret;
-    }
-
-    LOG_INF("CHARGER STATUS: %02x", sensor.val1);
-
-    *val = (sensor.val1 & STATUS_BATTERY_DETECTED) != 0;
-    return 0;
-}
-
 static int get_charger_status(const struct device *dev, enum charger_status *val) {
     struct sensor_value sensor;
     int ret = get_charger_channel(dev, SENSOR_CHAN_NPM1300_CHARGER_STATUS, &sensor);
@@ -92,10 +81,6 @@ static int get_charger_status(const struct device *dev, enum charger_status *val
         *val = CHARGER_STATUS_FULL;
     } else if (sensor.val1 & STATUS_CHARGING_MASK) {
         *val = CHARGER_STATUS_CHARGING;
-        // TODO: My npm1300 does not report battery detected when VBUS is not present.
-        // Is this expected or a hardware issue?
-        // } else if (sensor.val1 & STATUS_BATTERY_DETECTED) {
-        //     val->status = CHARGER_STATUS_DISCHARGING;
     } else {
         *val = CHARGER_STATUS_NOT_CHARGING;
     }
@@ -131,9 +116,6 @@ static int charger_npm1300_get_prop(const struct device *dev, const charger_prop
     case CHARGER_PROP_ONLINE:
         val->online = data->online;
         return 0;
-
-    case CHARGER_PROP_PRESENT:
-        return get_battery_present(dev, &val->present);
 
     case CHARGER_PROP_STATUS:
         return get_charger_status(dev, &val->status);
