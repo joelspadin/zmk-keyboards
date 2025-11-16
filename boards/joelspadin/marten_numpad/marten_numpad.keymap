@@ -47,14 +47,14 @@
             >;
         };
 
-        // layer_3 { status = "reserved"; };
-        // layer_4 { status = "reserved"; };
-        // layer_5 { status = "reserved"; };
-        // layer_6 { status = "reserved"; };
-        // layer_7 { status = "reserved"; };
-        // layer_8 { status = "reserved"; };
-        // layer_9 { status = "reserved"; };
-        // layer_10 { status = "reserved"; };
+        layer_3 { status = "reserved"; };
+        layer_4 { status = "reserved"; };
+        layer_5 { status = "reserved"; };
+        layer_6 { status = "reserved"; };
+        layer_7 { status = "reserved"; };
+        layer_8 { status = "reserved"; };
+        layer_9 { status = "reserved"; };
+        layer_10 { status = "reserved"; };
     };
 
     sensors {
