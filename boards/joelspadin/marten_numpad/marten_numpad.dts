@@ -53,6 +53,7 @@
         // numlock_led: numlock_led {
         //     pwms = <&pwm0 1 PWM_MSEC(20) PWM_POLARITY_NORMAL>;
         // };
+        // Also need to add "NRF_PSEL(PWM_OUT1, 0, 31)" to &pwm0_default and &pwm0_sleep.
     };
 
     indicators {
