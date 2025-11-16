@@ -27,38 +27,38 @@
         zephyr,code-partition = &code_partition;
         zephyr,sram = &sram0;
         zephyr,flash = &flash0;
-        // zmk,battery = &npm1300_fuel_gauge;
-        zmk,battery = &vbatt;
-        // zmk,charger = &npm1300_charger_wrapper;
+        zmk,battery = &npm1300_fuel_gauge;
+        // zmk,battery = &vbatt;
+        zmk,charger = &npm1300_charger_wrapper;
         zmk,physical-layout = &layout_numpad_21_key;
     };
 
     leds {
         compatible = "gpio-leds";
 
-        status_led: status_led {
-            gpios = <&gpio1 9 GPIO_ACTIVE_HIGH>;
-        };
-
         numlock_led: numlock_led {
             gpios = <&gpio0 31 GPIO_ACTIVE_HIGH>;
         };
     };
 
-    // TODO: Test idle power usage of GPIO vs PWM. Check if PWM is even needed
-    // or resistor value can be changed to get appropriate brightness.
-    // pwm_leds {
-    //     compatible = "pwm-leds";
+    pwm_leds {
+        compatible = "pwm-leds";
 
-    //     numlock_led: numlock_led {
-    //         pwms = <&pwm0 0 PWM_USEC(20) PWM_POLARITY_NORMAL>;
-    //     };
-    // };
+        status_led: status_led {
+            pwms = <&pwm0 0 PWM_USEC(20) PWM_POLARITY_NORMAL>;
+        };
+
+        // Numlock LED can be switched to PWM with the following, but that results
+        // in ~400 uA extra power drain, even when just using 100% brightness.
+        // numlock_led: numlock_led {
+        //     pwms = <&pwm0 1 PWM_MSEC(20) PWM_POLARITY_NORMAL>;
+        // };
+    };
 
     indicators {
         compatible = "zmk,indicator-leds";
 
-        numlock {
+        numlock_indicator: numlock {
             leds = <&numlock_led>;
             indicator = <HID_INDICATOR_NUM_LOCK>;
 
@@ -98,7 +98,6 @@
         diode-direction = "col2row";
         wakeup-source;
 
-        // TODO: test power usage when columns are GPIO_OPEN_SOURCE
         col-gpios
         = <&gpio1 14 GPIO_ACTIVE_HIGH>
         , <&gpio1 12 GPIO_ACTIVE_HIGH>
@@ -239,6 +238,7 @@
             compatible = "nordic,npm1300-regulator";
 
             main_regulator: BUCK2 {
+                regulator-init-microvolt = <3300000>;
                 regulator-min-microvolt = <3300000>;
                 regulator-max-microvolt = <3300000>;
                 regulator-always-on;
