@@ -4,7 +4,7 @@ name: Marten Numpad
 type: board
 arch: arm
 
-url: https://github.com/joelspadin/page-turner
+url: https://github.com/joelspadin/marten_numpad
 
 features:
   - keys
