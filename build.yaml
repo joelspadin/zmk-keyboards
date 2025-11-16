@@ -1,4 +1,6 @@
 include:
   - board: marten_numpad
+    shield: marten_nice_view
+
   - board: marten_numpad
     shield: settings_reset
