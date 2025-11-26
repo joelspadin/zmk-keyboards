@@ -176,14 +176,13 @@ static int indicator_led_init_pm_action(const struct device *dev, enum pm_device
         .active_brightness = DT_PROP_OR(inst, active_brightness, 100),                             \
         .inactive_brightness = DT_PROP_OR(inst, inactive_brightness, 0),                           \
         .on_while_idle = DT_PROP_OR(inst, on_while_idle, false),                                   \
-    }
+    },
 
 #define INDICATOR_LED_DEVICE(n)                                                                    \
     DT_INST_FOREACH_CHILD(n, DEFINE_CHILD_LEDS)                                                    \
                                                                                                    \
     static const struct indicator_led_child_config indicator_led_children_##n[] = {                \
-        DT_INST_FOREACH_CHILD(n, CHILD_CONFIG),                                                    \
-    };                                                                                             \
+        DT_INST_FOREACH_CHILD(n, CHILD_CONFIG)};                                                   \
                                                                                                    \
     static const struct indicator_led_config indicator_led_config_##n = {                          \
         .num_indicators = ARRAY_SIZE(indicator_led_children_##n),                                  \
