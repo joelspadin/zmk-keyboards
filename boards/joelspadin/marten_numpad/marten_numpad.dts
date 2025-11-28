@@ -99,6 +99,9 @@
         diode-direction = "col2row";
         wakeup-source;
 
+        debounce-press-ms = <1>;
+        debounce-release-ms = <5>;
+
         col-gpios
         = <&gpio1 14 GPIO_ACTIVE_HIGH>
         , <&gpio1 12 GPIO_ACTIVE_HIGH>
