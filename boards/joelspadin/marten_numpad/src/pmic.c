@@ -69,7 +69,7 @@ static void enter_ship_mode(struct k_work *work) {
         return;
     }
 
-    zmk_endpoints_clear_current();
+    zmk_endpoint_clear_reports();
 
     // Indicate that we are powering off. This also gives enough time to finish
     // clearing the endpoint.

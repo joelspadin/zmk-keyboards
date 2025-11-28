@@ -6,10 +6,12 @@
 #include <zephyr/drivers/led.h>
 #include <zephyr/pm/device.h>
 
+#include <zmk/endpoints.h>
 #include <zmk/event_manager.h>
 #include <zmk/hid_indicators.h>
 #include <zmk/usb.h>
 #include <zmk/events/activity_state_changed.h>
+#include <zmk/events/endpoint_changed.h>
 #include <zmk/events/hid_indicators_changed.h>
 #include <zmk/events/usb_conn_state_changed.h>
 
@@ -23,6 +25,7 @@ struct indicator_led_child_config {
     zmk_hid_indicators_t indicator;
     uint8_t active_brightness;
     uint8_t inactive_brightness;
+    uint8_t disconnected_brightness;
     bool on_while_idle;
 };
 
@@ -36,6 +39,7 @@ struct indicator_led_data {
     zmk_hid_indicators_t indicators;
     bool usb_powered;
     bool pm_suspended;
+    bool endpoint_connected;
 };
 
 static bool is_led_disabled(const struct indicator_led_child_config *config,
@@ -71,6 +75,10 @@ static uint8_t get_brightness(const struct indicator_led_child_config *config,
         return 0;
     }
 
+    if (!data->endpoint_connected) {
+        return config->disconnected_brightness;
+    }
+
     const bool active = (data->indicators & config->indicator) != 0;
     return active ? config->active_brightness : config->inactive_brightness;
 }
@@ -86,6 +94,8 @@ static int update_indicator(const struct indicator_led_child_config *config,
             LOG_ERR("Failed to set %s %u to %u%%: %d", spec->dev->name, spec->index, value, err);
             return err;
         }
+
+        LOG_DBG("Set %s %u to %u%%", spec->dev->name, spec->index, value);
     }
 
     return 0;
@@ -98,6 +108,7 @@ static int update_device(const struct device *dev) {
     data->activity_state = zmk_activity_get_state();
     data->indicators = zmk_hid_indicators_get_current_profile();
     data->usb_powered = zmk_usb_is_powered();
+    data->endpoint_connected = zmk_endpoint_is_connected();
 
     for (int i = 0; i < config->num_indicators; i++) {
         const int err = update_indicator(&config->indicators[i], data);
@@ -112,21 +123,23 @@ static int update_device(const struct device *dev) {
 #define INST_DEV(n) DEVICE_DT_GET(DT_DRV_INST(n)),
 static const struct device *all_instances[] = {DT_INST_FOREACH_STATUS_OKAY(INST_DEV)};
 
-static int update_all(void) {
+static void update_all_indicators(struct k_work *work) {
+    LOG_DBG("Updating indicator LEDs");
+
     for (int i = 0; i < ARRAY_SIZE(all_instances); i++) {
-        const int err = update_device(all_instances[i]);
-        if (err) {
-            return err;
+        if (device_is_ready(all_instances[i])) {
+            update_device(all_instances[i]);
         }
     }
-
-    return 0;
 }
 
-static int indicator_led_event_listener(const zmk_event_t *eh) {
-    LOG_DBG("Updating indicators: %s", eh->event->name);
+// We may get multiple events at the same time (e.g. endpoint changed will
+// also trigger HID indicators changed), but we only need to update the LEDs
+// once per batch of events, so defer the updates with a work item.
+static K_WORK_DEFINE(update_all_indicators_work, update_all_indicators);
 
-    update_all();
+static int indicator_led_event_listener(const zmk_event_t *eh) {
+    k_work_submit(&update_all_indicators_work);
     return ZMK_EV_EVENT_BUBBLE;
 }
 
@@ -136,6 +149,7 @@ ZMK_LISTENER(indicator_led, indicator_led_event_listener);
 ZMK_SUBSCRIPTION(indicator_led, zmk_activity_state_changed);
 ZMK_SUBSCRIPTION(indicator_led, zmk_hid_indicators_changed);
 ZMK_SUBSCRIPTION(indicator_led, zmk_usb_conn_state_changed);
+ZMK_SUBSCRIPTION(indicator_led, zmk_endpoint_changed);
 
 #if IS_ENABLED(CONFIG_PM_DEVICE)
 
@@ -175,6 +189,7 @@ static int indicator_led_init_pm_action(const struct device *dev, enum pm_device
         .indicator = DT_PROP(inst, indicator),                                                     \
         .active_brightness = DT_PROP_OR(inst, active_brightness, 100),                             \
         .inactive_brightness = DT_PROP_OR(inst, inactive_brightness, 0),                           \
+        .disconnected_brightness = DT_PROP_OR(inst, disconnected_brightness, 0),                   \
         .on_while_idle = DT_PROP_OR(inst, on_while_idle, false),                                   \
     },
 
@@ -200,6 +215,6 @@ static int indicator_led_init_pm_action(const struct device *dev, enum pm_device
                                                                                                    \
     DEVICE_DT_INST_DEFINE(n, &indicator_led_init, PM_DEVICE_DT_INST_GET(n),                        \
                           &indicator_led_data_##n, &indicator_led_config_##n, POST_KERNEL,         \
-                          CONFIG_KERNEL_INIT_PRIORITY_DEFAULT, NULL);
+                          CONFIG_ZMK_INDICATOR_LEDS_INIT_PRIORITY, NULL);
 
 DT_INST_FOREACH_STATUS_OKAY(INDICATOR_LED_DEVICE);

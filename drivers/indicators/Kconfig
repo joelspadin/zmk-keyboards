@@ -4,3 +4,13 @@ config ZMK_INDICATOR_LEDS
     depends on DT_HAS_ZMK_INDICATOR_LEDS_ENABLED
     select LED
     select ZMK_HID_INDICATORS
+
+if ZMK_INDICATOR_LEDS
+
+config ZMK_INDICATOR_LEDS_INIT_PRIORITY
+	int "ZMK indicator LED initialization priority"
+	default 91
+	help
+	    System initialization priority for ZMK indicator LEDs.
+
+endif # ZMK_INDICATOR_LEDS

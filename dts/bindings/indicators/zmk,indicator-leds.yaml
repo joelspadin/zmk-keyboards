@@ -24,6 +24,11 @@ child-binding:
       description: LED brightness in percent when the indicator is not active
       default: 0
 
+    disconnected-brightness:
+      type: int
+      description: LED brightness in percent when the keyboard is not connected to any device
+      default: 0
+
     on-while-idle:
       type: boolean
       description: Keep LEDs enabled even when the keyboard is idle and on battery power
