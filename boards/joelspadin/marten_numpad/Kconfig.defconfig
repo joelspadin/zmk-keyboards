@@ -3,14 +3,6 @@ if BOARD_MARTEN_NUMPAD
 config ZMK_KEYBOARD_NAME
     default "Marten Numpad"
 
-choice ZMK_BOOTMODE_MAGIC_VALUE_BOOTLOADER_TYPE
-    default ZMK_BOOTMODE_MAGIC_VALUE_BOOTLOADER_TYPE_ADAFRUIT_NRF52
-endchoice
-
-choice SETTINGS_BACKEND
-    default SETTINGS_NVS
-endchoice
-
 if USB
 
 config USB_NRFX
